@@ -5,7 +5,7 @@
 
 const int BUFFER_SIZE = 256;
 
-UChar* string1 = (UChar*)u"\u27d9est string";
+UChar* string1 = (UChar*)u"Test string\uFBB3\u2502";
 UChar* string2 = (UChar*)u"Test string";
 
 void transliterate(UTransliterator* trans, UChar* string, UChar* buf) {
@@ -37,12 +37,19 @@ int main()
     UChar* id = (UChar*)u"My transliterator";
 
     // Rules: 
+    //
     // Remove some empty space characters that are not displayed in TF2 and replace some with empty space '\u0020' that are not normalized. 
+    //
     // Replace \u00A1 with i since they look almost the same in TF2 but won't show up as confusable (may need to do this with other characters as well?)
+    //
     // Normalize to NFKD form
-    // Filter out all characters in the categories C (Other) and M (Mark)
+    //
+    // Filter out all characters in the categories:
+    // C (Other), Lm (Letter, modifier), Lo (Letter, other), M (Mark), P (Punctuation), Sk (Symbol, modifier), Sm (Symbol, math) and So (Symbol, other)
+    //
     // Lastly remove any spaces that are followed by another space. 
-    UChar* rules = (UChar*)u"\u200A > ; \u2009 > ; \u202F > ; \u205F > ; \u2006 > ; \u1680 > '\u0020' ; '\u2029' > '\u0020'; '\u2028' > '\u0020'; \u00A1 > i; ::NFKD; [[:C:][:M:]] > ; '\u0020' } '\u0020' > ; ";
+    // 
+    UChar* rules = (UChar*)u"\u200A > ; \u2009 > ; \u202F > ; \u205F > ; \u2006 > ; \u1680 > '\u0020' ; '\u2029' > '\u0020'; '\u2028' > '\u0020'; \u00A1 > i; ::NFKD; [[:C:][:Lm:][:Lo:][:M:][:P:][:Sk:][:Sm:][:So:]] > ; '\u0020' } '\u0020' > ; ";
 
     UErrorCode status = U_ZERO_ERROR;
     UParseError pe;

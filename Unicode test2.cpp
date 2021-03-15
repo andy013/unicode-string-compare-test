@@ -76,7 +76,7 @@ int main()
         std::cout << "\nStrings are confusable! \n";
     }
     else {
-        std::cout << "\nStrings are different. \n";
+        std::cout << "\nStrings are NOT confusable. \n";
     }
 
     return 0;
